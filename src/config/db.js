@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { Pool } from "pg";
+import { configDotenv } from "dotenv";
+configDotenv();
 
 const pool = new Pool({
   port: process.env.PG_PORT,
@@ -16,7 +16,6 @@ pool.on("connect", () => {
 
 pool.on("error", (err) => {
   console.error("Kutilmagan baza xatosi:", err.message);
-  process.exit(-1);
 });
 
 export default pool;
