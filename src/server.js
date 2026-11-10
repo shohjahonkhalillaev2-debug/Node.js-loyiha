@@ -5,7 +5,7 @@ import main from "./routers/index.js";
 
 configDotenv();
 const app = express();
-app.use(express.json);
-app.use(main)
+app.use(express.json());
+app.use(main);
 
 app.listen(process.env.PORT, () => console.log("Server is running"));
