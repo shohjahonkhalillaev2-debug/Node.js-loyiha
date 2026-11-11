@@ -5,6 +5,10 @@ class LMSOperationsController {
     const resData = await opsService.createLesson(req);
     return res.status(resData.status).json(resData);
   }
+  async getMyLessons(req, res) {
+    const resData = await opsService.getMyLessons(req);
+    return res.status(resData.status).json(resData);
+  }
   async getLessonsByGroup(req, res) {
     const resData = await opsService.getLessonsByGroup(req);
     return res.status(resData.status).json(resData);

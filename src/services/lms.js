@@ -4,10 +4,22 @@ class LMSOperationsService {
   async createLesson(req) {
     const { title, group_id, lesson_date, description } = req.body;
     await pool.query(
-      `INSERT INTO lessons (title, group_id, lesson_date, description) VALUES ($1, $2, $3, $4)`,
+      `INSERT INTO lessons (title, group_id, lesson_date, description, teacherID) VALUES ($1, $2, $3, $4)`,
       [title, group_id, lesson_date, description],
     );
     return { status: 201, message: "Dars jadvalga qo'shildi" };
+  }
+  async getMyLessons(req) {
+    const teacherId = req.user.id;
+    const result = await pool.query(
+      `SELECT l.*, g.name AS group_name 
+       FROM lessons l
+       LEFT JOIN groups g ON l.group_id = g.id
+       WHERE l.teacher_id = $1 
+       ORDER BY l.lesson_date DESC`,
+      [teacherId],
+    );
+    return { status: 200, data: result.rows };
   }
 
   async getLessonsByGroup(req) {

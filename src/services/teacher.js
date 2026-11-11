@@ -2,6 +2,19 @@ import pool from "../config/db.js";
 import argon2 from "argon2";
 
 class TeacherService {
+
+  async getMyLessons(req) {
+  const teacherId = req.user.id;
+
+  const result = await pool.query(
+    `SELECT l.*, g.name AS group_name
+     FROM lessons l
+     LEFT JOIN groups g ON l.group_id = g.id
+     WHERE l.teacher_id = $1
+     ORDER BY l.id DESC`,
+    [teacherId]
+  );}
+  
   async createTeacher(req) {
     const { fullname, phone, password, branch_id } = req.body;
     const hashPassword = await argon2.hash(password);
