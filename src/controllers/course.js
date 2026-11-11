@@ -1,6 +1,10 @@
 import courseService from "../services/course.js";
 
 class CourseController {
+  async getMyCourses(req, res) {
+    const result = await courseService.getMyCourses(req);
+    return res.status(result.status).json(result);
+  }
   async createCourse(req, res) {
     const resData = await courseService.createCourse(req);
     return res.status(resData.status).json(resData);

@@ -3,6 +3,7 @@ import pool from "../config/db.js";
 class CourseService {
   async createCourse(req) {
     const { name, price, duration, description } = req.body;
+    const teacherId = req.user ? req.user.id : null;
     await pool.query(
       `INSERT INTO courses (name, price, duration, description) VALUES ($1, $2, $3, $4)`,
       [name, price, duration, description]
@@ -14,6 +15,14 @@ class CourseService {
     const result = await pool.query(`SELECT * FROM courses ORDER BY id ASC`);
     return { status: 200, data: result.rows };
   }
+ async getMyCourses(req) {
+  const teacherId = req.user.id;
+  const result = await pool.query(
+    `SELECT * FROM courses WHERE teacher_id = $1 ORDER BY id ASC`,
+    [teacherId]
+  );
+  return { status: 200, data: result.rows };
+}
 
   async getCourseById(req) {
     const { id } = req.params;
@@ -38,5 +47,6 @@ class CourseService {
     return { status: 200, message: "Kurs o'chirildi" };
   }
 }
+
 
 export default new CourseService();
